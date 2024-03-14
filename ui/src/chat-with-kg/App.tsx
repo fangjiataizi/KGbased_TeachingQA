@@ -149,6 +149,7 @@ function App() {
     }
 
     const websocketResponse = JSON.parse(lastMessage.data) as WebSocketResponse;
+    console.log(websocketResponse)
 
     if (websocketResponse.type === "debug") {
       console.log(websocketResponse.detail);
@@ -192,6 +193,7 @@ function App() {
             ...lastChatMessage,
             complete: true,
             cypher: websocketResponse.generated_cypher,
+            message: lastChatMessage.message + websocketResponse.output,
           },
         ];
       });
@@ -270,7 +272,7 @@ function App() {
       )}
         <div className="flex justify-end mr-4">
         <select value={text2cypherModel} onChange={handleModelChange}>
-            <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo</option>
+            <option value="gpt-3.5-turbo-0613">阿里大模型</option>
             <option value="gpt-4">gpt-4</option>
         </select>
         </div>

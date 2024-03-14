@@ -29,12 +29,12 @@ RETURN "(:" + label + ")-[:" + property + "]->(:" + toString(other[0]) + ")" AS 
 
 def schema_text(node_props, rel_props, rels) -> str:
     return f"""
-  This is the schema representation of the Neo4j database.
-  Node properties are the following:
+这是Neo4j数据库的模式表示。
+节点属性如下：
   {node_props}
-  Relationship properties are the following:
+关系属性如下：
   {rel_props}
-  The relationships are the following
+关系如下：
   {rels}
   """
 
@@ -113,6 +113,8 @@ class Neo4jDatabase:
                     return [{"code": "error", "message": e}]
 
     def refresh_schema(self) -> None:
+        result = self.query(node_properties_query)
+        print(result)
         node_props = [el["output"] for el in self.query(node_properties_query)]
         rel_props = [el["output"] for el in self.query(rel_properties_query)]
         rels = [el["output"] for el in self.query(rel_query)]

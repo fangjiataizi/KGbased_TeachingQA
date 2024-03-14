@@ -2,14 +2,11 @@ from typing import Any, Awaitable, Callable, Dict, List
 
 from components.base_component import BaseComponent
 from llm.basellm import BaseLLM
+from llm.ali_llm import init_message,get_response
+from dashscope.api_entities.dashscope_response import Role
 
 system = f"""
-You are an assistant that helps to generate text to form nice and human understandable answers based.
-The latest prompt contains the information, and you need to generate a human readable response based on the given information.
-Make the answer sound as a response to the question. Do not mention that you based the result on the given information.
-Do not add any additional information that is not explicitly provided in the latest prompt.
-I repeat, do not add any information that is not explicitly given.
-Make the answer as concise as possible and do not use more than 50 words.
+你是一个助手，帮助生成基于给定信息的、易于理解的文本回答。最新的提示包含了信息，你需要根据这些信息生成人类可读的回应。让答案听起来像是对问题的回应，不要提及你是基于给定信息得出结果的。不要添加任何在最新提示中没有明确提供的额外信息。我再重复一遍，不要添加任何未明确给出的信息。请尽可能让答案简洁，且不要超过50个词。
 """
 
 
@@ -44,8 +41,8 @@ class SummarizeCypherResult(BaseComponent):
 
     def generate_user_prompt(self, question: str, results: List[Dict[str, str]]) -> str:
         return f"""
-        The question was {question}
-        Answer the question by using the following results:
+        用户的问题是： {question}
+        请基于下面这些结果来回答这个问题：
         {[remove_large_lists(el) for el in  results] if self.exclude_embeddings else results}
         """
 
@@ -72,5 +69,6 @@ class SummarizeCypherResult(BaseComponent):
             {"role": "system", "content": system},
             {"role": "user", "content": self.generate_user_prompt(question, results)},
         ]
-        output = await self.llm.generateStreaming(messages, onTokenCallback=callback)
+        # output = await self.llm.generateStreaming(messages, onTokenCallback=callback)
+        output=get_response(messages)
         return "".join(output)

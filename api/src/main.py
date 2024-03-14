@@ -38,14 +38,29 @@ class questionProposalPayload(BaseModel):
 
 
 # Maximum number of records used in the context
-HARD_LIMIT_CONTEXT_RECORDS = 10
+HARD_LIMIT_CONTEXT_RECORDS = 1
 
+# neo4j_connection = Neo4jDatabase(
+#     host=os.environ.get("NEO4J_URL", "neo4j+s://demo.neo4jlabs.com"),
+#     user=os.environ.get("NEO4J_USER", "companies"),
+#     password=os.environ.get("NEO4J_PASS", "companies"),
+#     database=os.environ.get("NEO4J_DATABASE", "companies"),
+# )
+#teaching neo4j
 neo4j_connection = Neo4jDatabase(
-    host=os.environ.get("NEO4J_URL", "neo4j+s://demo.neo4jlabs.com"),
-    user=os.environ.get("NEO4J_USER", "companies"),
-    password=os.environ.get("NEO4J_PASS", "companies"),
-    database=os.environ.get("NEO4J_DATABASE", "companies"),
+    host=os.environ.get("NEO4J_URL", "neo4j+s://b4aa5de0.databases.neo4j.io"),
+    user=os.environ.get("NEO4J_USER", "neo4j"),
+    password=os.environ.get("NEO4J_PASS", "dnt8t8RRucD60d_Zr4wJp05TxQ4kaOM9VrgiCTu2qLA"),
+    database=os.environ.get("NEO4J_DATABASE", "neo4j"),
 )
+
+#medical neo4j
+# neo4j_connection = Neo4jDatabase(
+#     host=os.environ.get("NEO4J_URL", "neo4j+s://a1e28212.databases.neo4j.io"),
+#     user=os.environ.get("NEO4J_USER", "neo4j"),
+#     password=os.environ.get("NEO4J_PASS", "j1Z-JLr04Zq3cZSAFfSNqTRm4xZ5xDPxG-zjOVbmKWw"),
+#     database=os.environ.get("NEO4J_DATABASE", "neo4j"),
+# )
 
 
 # Initialize LLM modules
@@ -176,6 +191,11 @@ async def websocket_endpoint(websocket: WebSocket):
                         callback=onToken,
                     )
                     chatHistory.append({"role": "system", "content": output})
+                    print('final send json:{}'.format({
+                            "type": "end",
+                            "output": output,
+                            "generated_cypher": results["generated_cypher"],
+                        }))
                     await websocket.send_json(
                         {
                             "type": "end",

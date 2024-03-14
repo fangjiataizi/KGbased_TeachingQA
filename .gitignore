@@ -43,3 +43,5 @@ MANIFEST
 .vscode
 .env
 **/neo4j/data/
+.idea/
+key/

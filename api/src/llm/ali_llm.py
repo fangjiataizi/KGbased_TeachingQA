@@ -11,7 +11,7 @@ from dashscope import Generation
 from dashscope.api_entities.dashscope_response import Role
 
 # 定义初始化消息的函数
-def init_message(init_message='你是一个智能客服助手'):
+def init_message(init_message='你是一个教学设计专家'):
     # 创建一个包含一条系统消息的列表
     messages = [{'role': Role.SYSTEM, 'content': init_message}]
     return messages
